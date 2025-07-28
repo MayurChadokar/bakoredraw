@@ -1,0 +1,51 @@
+{
+	"name": "DRAW",
+	"version": "0.1.0",
+	"main": "server/",
+	"private": true,
+	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^1.2.34",
+		"@fortawesome/free-solid-svg-icons": "^5.15.2",
+		"@fortawesome/react-fontawesome": "^0.1.14",
+		"axios": "^0.21.1",
+		"bootstrap": "^4.6.0",
+		"cors": "^2.8.5",
+		"express": "^4.16.4",
+		"jquery": "^3.5.1",
+		"react": "^16.14.0",
+		"react-activity": "^1.2.2",
+		"react-bootstrap": "^1.4.3",
+		"react-bootstrap-range-slider": "^2.0.2",
+		"react-bootstrap-sweetalert": "^5.2.0",
+		"react-color": "^2.14.1",
+		"react-device-detect": "^1.15.0",
+		"react-dom": "^16.14.0",
+		"react-scripts": "^5.0.1",
+		"reactstrap": "^8.9.0",
+		"request": "^2.88.2",
+		"sass": "^1.88.0",
+		"socket.io": "^2.1.1",
+		"socket.io-client": "^2.1.1",
+		"sweetalert2": "^10.15.5"
+	},
+	"scripts": {
+		"start": "react-scripts --openssl-legacy-provider start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"deploy": "serve -s build",
+		"start-sw": "http-server ./build"
+	},
+	"eslintConfig": {
+		"extends": ""
+	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	],
+	"devDependencies": {
+		"http-server": "^0.12.3"
+	}
+}
