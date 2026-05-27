@@ -1,0 +1,56 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# production
+/build
+/dist
+
+# testing
+/coverage
+
+# logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# cache
+.cache/
+.parcel-cache/
+
+# misc
+*.tmp
+*.temp
+
+# runtime
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# optional
+*.tgz
+
+# React build artifacts
+/build/static
+
+# local executables
+node.exe

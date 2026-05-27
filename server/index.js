@@ -1,8 +1,30 @@
-var express = require("express");
-var cors = require('cors')
+const express = require("express");
+const cors = require('cors')
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+// const io = require("socket.io")(server);
+// var io = require("socket.io")(server, {
+//   cors: {
+    // origin: [
+    //   "http://localhost:3000",
+    //   "https://bakoredraw.syscraftonline.net"
+    // ],
+    // methods: ["GET", "POST"],
+    // credentials: true
+//   }
+// });
+var io = require("socket.io")(server, {
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "https://bakoredraw.syscraftonline.net"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  transports: ["websocket", "polling"] // ensures fallback for browsers that don't handle WS
+});
+
 const bodyParser = require("body-parser");
 app.use(cors())
 app.use(bodyParser.json());
@@ -64,12 +86,13 @@ io.sockets.on("connection", (socket) => {
 		users.push(join1);
 //		users=removeDuplicates(users,"info@info.com");
 
-users=Array.from(new Set(users.map(JSON.stringify))).map(JSON.parse)
-//users.push(size);
+	users=Array.from(new Set(users.map(JSON.stringify))).map(JSON.parse)
+	//users.push(size);
 		socket.join(join.room);
 		// Send existing drawing data to the user who just joined
-		if (roomDrawings[room]) {
-		socket.emit("drawing_eraseline", roomDrawings[room]);
+		const currentDataForRoom = datas.filter((d) => d.room === join.room);
+		if (currentDataForRoom && currentDataForRoom.length) {
+			socket.emit("drawing_eraseline", currentDataForRoom);
 		}
 
 		socket.userId = join.id;
@@ -99,12 +122,14 @@ users=Array.from(new Set(users.map(JSON.stringify))).map(JSON.parse)
 		
 	// 	//socket.in(data.room).emit("savedata", data);
 	// });
+	// Persist incoming drawing data and broadcast to other clients in the room
 	socket.on("drawing", (data) => {
-		if (!roomDrawings[data.room]) {
-			roomDrawings[data.room] = [];
+		if (data && data.line && data.line.length > 0) {
+			datas.push(data);
 		}
-		roomDrawings[data.room].push(data);
-		socket.in(data.room).emit("drawing", data);
+		// send to all except the sender
+		socket.broadcast.to(data.room).emit("drawing", data);
+
 	});
 
     socket.on("clearline", (data)=>{

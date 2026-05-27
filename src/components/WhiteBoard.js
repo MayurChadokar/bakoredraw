@@ -8,7 +8,17 @@ import Dots from 'react-activity/lib/Dots';
 import {isMobile,} from 'react-device-detect';
 // In development you have to point the react front end explicitly to your express server which will be running on a different port than the React Dev Server
 
-const socket = socketIOClient("https://bakoredraw.syscraftonline.net/"); //development;
+// Connect directly to the Node socket server
+// For local dev, use http://localhost:4010
+// For production, use the actual server URL via env var
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || "http://localhost:4010";
+const socket = socketIOClient(SOCKET_URL, { 
+  transports: ["websocket", "polling"],
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  reconnectionAttempts: 5
+});
 // const socket = socketIOClient("https://santapp.syscraft-pro.tk:3000/"); //development;
 //  const socket = socketIOClient("http://192.168.1.95:4010"); //development;
 // In production, the express server will be the one to serve the react application so we can leave out the connection string argument, which will allow the socket to default to it origin (theoretically your express server)
