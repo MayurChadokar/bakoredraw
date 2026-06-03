@@ -11,7 +11,7 @@ import {isMobile,} from 'react-device-detect';
 // Connect directly to the Node socket server
 // For local dev, use http://localhost:4010
 // For production, use the actual server URL via env var
-const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || "http://localhost:4010";
+const SOCKET_URL = process.env.REACT_APP_SOCKET_URL || (window.location.hostname === "localhost" ? "http://localhost:4010" : window.location.origin);
 const socket = socketIOClient(SOCKET_URL, { 
   transports: ["websocket", "polling"],
   reconnection: true,
