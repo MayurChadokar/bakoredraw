@@ -17,7 +17,8 @@ var io = require("socket.io")(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://bakoredraw.syscraftonline.net"
+      "https://bakoredraw.syscraftonline.net",
+      "https://bakoredraw.com"
     ],
     methods: ["GET", "POST"],
     credentials: true
