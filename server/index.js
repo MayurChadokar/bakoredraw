@@ -20,6 +20,7 @@ var io = require("socket.io")(server, {
       "https://bakoredraw.syscraftonline.net",
       "https://bakoredraw.com",
       "https://www.bakoredraw.com",
+      "https://draw.bakoredraw.com",
       "https://bakoredraw.onrender.com"
     ],
     methods: ["GET", "POST"],

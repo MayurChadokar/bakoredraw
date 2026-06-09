@@ -133,7 +133,7 @@ const urlParams = new URLSearchParams(queryString);
 			 email:this.state.typingEmail
 		})
 		
-		const apiUrl ='https://bakoredraw.com/draw/wp-admin/admin-ajax.php?action=check_user&email='+this.state.typingEmail+'&accesskey='+this.state.typingRoom;
+		const apiUrl ='https://www.bakoredraw.com/draw/wp-admin/admin-ajax.php?action=check_user&email='+this.state.typingEmail+'&accesskey='+this.state.typingRoom;
 		
 		
 		axios.get(apiUrl)
