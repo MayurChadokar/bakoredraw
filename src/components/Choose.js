@@ -54,6 +54,7 @@ export default class Choose extends Component {
 							}
 							name="email"
 							placeholder="Email"
+							autoComplete="username"
 							value={this.props.typing}
 							onChange={(e) =>
 								this.props.setEmail(
@@ -69,6 +70,7 @@ export default class Choose extends Component {
 								<label for="psw">Access Key:</label>
 								  <input type="password" name="room"
 							placeholder="Accesskey"
+							autoComplete="current-password"
 							onKeyPress={(e) =>
 								e.key === "Enter"
 									? this.props.setAccesskey()
@@ -86,7 +88,7 @@ export default class Choose extends Component {
 							/>
 							</div>
 							<div className="col-sm-12 text-center my-4">
-								 <button  onClick={() => this.props.getAuth()} className="verify_button">Verify</button>
+								 <button type="button" onClick={() => this.props.getAuth()} className="verify_button">Verify</button>
 							</div>
 						</div>
 					</div>
