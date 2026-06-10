@@ -40,7 +40,14 @@ app.get("/api/check_user", async (req, res) => {
 		const { email, accesskey } = req.query;
 		const apiUrl = `https://draw.bakoredraw.com/draw/wp-admin/admin-ajax.php?action=check_user&email=${email}&accesskey=${accesskey}`;
 		
-		const response = await axios.get(apiUrl);
+		// Add browser headers to bypass Cloudflare's bot protection which blocks Render
+		const response = await axios.get(apiUrl, {
+			headers: {
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+				"Accept": "application/json, text/plain, */*",
+				"Accept-Language": "en-US,en;q=0.9"
+			}
+		});
 		res.send(response.data);
 	} catch (error) {
 		console.error("Proxy Error:", error.message);
