@@ -298,9 +298,16 @@ io.sockets.on("connection", (socket) => {
 });
 
 
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const path = require("path");
 const { response } = require("express");
-const { on } = require("cluster");
+
+// Proxy requests starting with /draw to the WordPress backend
+app.use('/draw', createProxyMiddleware({ 
+  target: 'https://draw.bakoredraw.com', 
+  changeOrigin: true 
+}));
+
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "/../build/index.html"));
 });
