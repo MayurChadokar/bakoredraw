@@ -80,7 +80,7 @@ return(
                 name="link"
                 placeholder=""
                 // disabled
-                defaultValue={'https://bakoredraw.com?room='+this.props.room+'&user='+true}
+                defaultValue={'https://bakoredraw.com?room='+this.props.room+'&email='+this.props.id+'&user='+true}
                 // defaultValue={'http://192.168.1.95:3000?room='+this.props.room+'&user='+true}
                 />
 					<button className="copyBtn"  onClick = {() => this.copyCodeToClipboard()}>Copy</button>

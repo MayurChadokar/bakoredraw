@@ -51,7 +51,7 @@ export default class WhiteBoard extends Component {
     this.whiteboard = React.createRef();
 
     socket.emit("join", {
-      id:'active@gmail.com' ,
+      id: this.props.email || 'active@gmail.com',
       room: this.props.room,
       admin:this.props.admin
     });

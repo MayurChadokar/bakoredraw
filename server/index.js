@@ -30,7 +30,23 @@ var io = require("socket.io")(server, {
 });
 
 const bodyParser = require("body-parser");
+const axios = require("axios");
 app.use(cors())
+app.use(bodyParser.json());
+
+// Proxy endpoint to bypass CORS
+app.get("/api/check_user", async (req, res) => {
+	try {
+		const { email, accesskey } = req.query;
+		const apiUrl = `https://draw.bakoredraw.com/draw/wp-admin/admin-ajax.php?action=check_user&email=${email}&accesskey=${accesskey}`;
+		
+		const response = await axios.get(apiUrl);
+		res.send(response.data);
+	} catch (error) {
+		console.error("Proxy Error:", error.message);
+		res.status(500).json({ success: "0", error: "Proxy request failed" });
+	}
+});
 app.use(bodyParser.json());
 
 app.use(express.static(`${__dirname}/../build`));

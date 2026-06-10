@@ -33,26 +33,9 @@ class App extends Component {
 	}
 	
 	async componentWillMount(prevState) {
-		 email = await localStorage.getItem('user');
-		 room = await localStorage.getItem('room');
-	
-		
-		if (email && room) {
-		
-		
-		  this.setState({ 
-			  room: room,
-			  email:email,
-			  loading:false,
-			 });
-		} else {
-		  this.setState({ 
-			room: '',
-			email:'',
-			loading:false
-		   });
-		}
-	  };
+		// Do not auto-login from localStorage if the user just visits the root URL.
+		// Session will be restored via URL parameters in componentDidMount instead.
+	};
 	componentDidMount() {
 		let deferredPrompt;
 		
@@ -79,28 +62,33 @@ class App extends Component {
 			  })
 		  }
 		const queryString = window.location.search;
-
-const urlParams = new URLSearchParams(queryString);
-
- const user = urlParams.get('user')
-// const user = true
- room = urlParams.get('room')
+		const urlParams = new URLSearchParams(queryString);
+		const user = urlParams.get('user');
+		const urlRoom = urlParams.get('room');
+		const urlEmail = urlParams.get('email');
+		room = urlRoom;
+		email = urlEmail;
 
 		let param = window.location.pathname;
 		
 		if(user){
-			
 			this.setState({
-				room:room,
+				room: urlRoom,
 				loading:false,
 				admin:false, 
 				user:true,
-				email:'active@active.com'
+				email: urlEmail || 'active@active.com'
 			})
-		}else {
-			
-			
-
+		} else if (urlRoom && urlEmail) {
+			// Restore admin session if URL has room and email but no user parameter
+			this.setState({
+				room: urlRoom,
+				email: urlEmail,
+				loading:false,
+				admin:true, 
+				user:false
+			});
+		} else {
 			this.setState({
 				email:'',
 				room:'',
@@ -108,7 +96,6 @@ const urlParams = new URLSearchParams(queryString);
 				admin:false, 
 				user:false
 			});
-			
 		}
 	
 		
@@ -127,13 +114,18 @@ const urlParams = new URLSearchParams(queryString);
 		});
 	};
 	getAuth =()=>  {
+		console.log("new building - 1");
 		this.setState({
 			 loading:true,
 			 room:this.state.typingRoom,
 			 email:this.state.typingEmail
 		})
 		
-		const apiUrl ='https://draw.bakoredraw.com/draw/wp-admin/admin-ajax.php?action=check_user&email='+this.state.typingEmail+'&accesskey='+this.state.typingRoom;
+		// Use the Node.js backend to bypass CORS
+		// In development (localhost), this will hit http://localhost:4010/api/check_user
+		// In production (Render), this will hit https://bakoredraw.onrender.com/api/check_user
+		const baseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:4010' : '';
+		const apiUrl = `${baseUrl}/api/check_user?email=${this.state.typingEmail}&accesskey=${this.state.typingRoom}`;
 		
 		
 		axios.get(apiUrl)
@@ -144,8 +136,8 @@ const urlParams = new URLSearchParams(queryString);
 				// res =JSON.parse(res)
 				
 				 if(res.data.success == '1'){
+					window.history.pushState({}, '', `/?room=${this.state.typingRoom}&email=${this.state.typingEmail}`);
 					this.setState({
-				 
 						admin:true,
 						authResponse:res.data.success,
 						loading:false,
@@ -155,18 +147,23 @@ const urlParams = new URLSearchParams(queryString);
 				localStorage.setItem('room',this.state.typingRoom);
 				localStorage.setItem('user',this.state.typingEmail); 
 				 }else if(res.data.success == '0'){
-					 
 					this.setState({
 				        errorText:'Invalid email or access code',
 						error:true,
 						loading:false
 					  });
 				 }else if(res.data.success == '2'){
+					window.history.pushState({}, '', `/?room=${this.state.typingRoom}&email=${this.state.typingEmail}&user=true`);
 					this.setState({
-				        errorText:'User has already downloaded maximum time',
-						error:true,
+						admin:false,
+						user:true,
+						authResponse: '2',
+						errorText:'',
+						error:false,
 						loading:false
 					  });
+					localStorage.setItem('room',this.state.typingRoom);
+					localStorage.setItem('user',this.state.typingEmail);
 				 }else{
 					this.setState({
 				        errorText:'Something went wrong ! Try again',
@@ -193,6 +190,7 @@ const urlParams = new URLSearchParams(queryString);
     logout =()=>{
 		localStorage.removeItem("user");
 		localStorage.removeItem("room");
+		window.history.pushState({}, '', '/');
 		email = '';
 		room = '';
 		this.setState({
@@ -202,7 +200,6 @@ const urlParams = new URLSearchParams(queryString);
 			typingRoom:'',
 			authResponse:'',
 			error:'',
-
 		})
 	}
 	render() {
