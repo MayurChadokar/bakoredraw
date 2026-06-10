@@ -121,12 +121,8 @@ class App extends Component {
 			 email:this.state.typingEmail
 		})
 		
-		// Use the Node.js backend to bypass CORS
-		// In development (localhost), this will hit http://localhost:4010/api/check_user
-		// In production (Render), this will hit https://bakoredraw.onrender.com/api/check_user
-		const baseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:4010' : '';
-		const apiUrl = `${baseUrl}/api/check_user?email=${this.state.typingEmail}&accesskey=${this.state.typingRoom}`;
-		
+		// Communicate directly with the WordPress backend now that CORS is fixed in .htaccess
+		const apiUrl = `https://draw.bakoredraw.com/draw/wp-admin/admin-ajax.php?action=check_user&email=${this.state.typingEmail}&accesskey=${this.state.typingRoom}`;
 		
 		axios.get(apiUrl)
 		
