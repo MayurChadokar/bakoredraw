@@ -594,7 +594,7 @@ export default class WhiteBoard extends Component {
         room ={this.state.room}
         admin = {this.props.admin}
         logout = {this.props.logout}
-        onRefresh = {this.onRefresh, this.refreshPage}
+        onRefresh={() => { this.onRefresh(); this.refreshPage(); }}
         id= {this.state.id}
       />
       </div>

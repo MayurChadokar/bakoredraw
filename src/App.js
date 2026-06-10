@@ -133,7 +133,7 @@ const urlParams = new URLSearchParams(queryString);
 			 email:this.state.typingEmail
 		})
 		
-		const apiUrl ='https://www.bakoredraw.com/draw/wp-admin/admin-ajax.php?action=check_user&email='+this.state.typingEmail+'&accesskey='+this.state.typingRoom;
+		const apiUrl ='https://draw.bakoredraw.com/draw/wp-admin/admin-ajax.php?action=check_user&email='+this.state.typingEmail+'&accesskey='+this.state.typingRoom;
 		
 		
 		axios.get(apiUrl)
@@ -169,7 +169,7 @@ const urlParams = new URLSearchParams(queryString);
 					  });
 				 }else{
 					this.setState({
-				        errorText:'Some thing went wrong ! Try again',
+				        errorText:'Something went wrong ! Try again',
 						error:true,
 						loading:false
 					  });
@@ -182,7 +182,7 @@ const urlParams = new URLSearchParams(queryString);
 			  this.setState({
 				  loading:false,
 				  error:true,
-				  errorText:'Some thing went wrong ! Try again',
+				  errorText:'Something went wrong ! Try again',
 			  })
 		  })
 		
