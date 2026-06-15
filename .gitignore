@@ -25,7 +25,6 @@ yarn-error.log*
 .env.production.local
 
 # editor files
-.vscode/
 .idea/
 
 # OS files
@@ -54,3 +53,7 @@ pids
 
 # local executables
 node.exe
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore

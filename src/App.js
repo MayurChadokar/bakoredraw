@@ -63,9 +63,27 @@ class App extends Component {
 		  }
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
-		const user = urlParams.get('user');
-		const urlRoom = urlParams.get('room');
-		const urlEmail = urlParams.get('email');
+		let user = urlParams.get('user');
+		let urlRoom = urlParams.get('room');
+		let urlEmail = urlParams.get('email');
+		
+		const localRoom = localStorage.getItem('room');
+		const localEmail = localStorage.getItem('user');
+		const localIsUser = localStorage.getItem('isUser');
+		const localIsAdmin = localStorage.getItem('isAdmin');
+
+		if (!urlRoom && !urlEmail && localRoom && localEmail) {
+			urlRoom = localRoom;
+			urlEmail = localEmail;
+			if (localIsUser === 'true') {
+				user = 'true';
+			}
+			const savedUrl = localStorage.getItem('savedUrl');
+			if (savedUrl) {
+				window.history.replaceState({}, '', savedUrl);
+			}
+		}
+
 		room = urlRoom;
 		email = urlEmail;
 
@@ -132,7 +150,8 @@ class App extends Component {
 				// res =JSON.parse(res)
 				
 				 if(res.data.success == '1'){
-					window.history.pushState({}, '', `/?room=${this.state.typingRoom}&email=${this.state.typingEmail}`);
+					const targetUrl = `/?room=${this.state.typingRoom}&email=${this.state.typingEmail}`;
+					window.history.pushState({}, '', targetUrl);
 					this.setState({
 						admin:true,
 						authResponse:res.data.success,
@@ -142,6 +161,9 @@ class App extends Component {
 					  });
 				localStorage.setItem('room',this.state.typingRoom);
 				localStorage.setItem('user',this.state.typingEmail); 
+				localStorage.setItem('isAdmin', 'true');
+				localStorage.removeItem('isUser');
+				localStorage.setItem('savedUrl', targetUrl);
 				 }else if(res.data.success == '0'){
 					this.setState({
 				        errorText:'Invalid email or access code',
@@ -149,7 +171,8 @@ class App extends Component {
 						loading:false
 					  });
 				 }else if(res.data.success == '2'){
-					window.history.pushState({}, '', `/?room=${this.state.typingRoom}&email=${this.state.typingEmail}&user=true`);
+					const targetUrl = `/?room=${this.state.typingRoom}&email=${this.state.typingEmail}&user=true`;
+					window.history.pushState({}, '', targetUrl);
 					this.setState({
 						admin:false,
 						user:true,
@@ -160,6 +183,9 @@ class App extends Component {
 					  });
 					localStorage.setItem('room',this.state.typingRoom);
 					localStorage.setItem('user',this.state.typingEmail);
+					localStorage.setItem('isUser', 'true');
+					localStorage.removeItem('isAdmin');
+					localStorage.setItem('savedUrl', targetUrl);
 				 }else{
 					this.setState({
 				        errorText:'Something went wrong ! Try again',
@@ -186,6 +212,9 @@ class App extends Component {
     logout =()=>{
 		localStorage.removeItem("user");
 		localStorage.removeItem("room");
+		localStorage.removeItem("isAdmin");
+		localStorage.removeItem("isUser");
+		localStorage.removeItem("savedUrl");
 		window.history.pushState({}, '', '/');
 		email = '';
 		room = '';

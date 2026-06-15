@@ -167,8 +167,10 @@ io.sockets.on("connection", (socket) => {
 				break;
 			}
 		}
-		datas.splice(l, 1);
 		
+		if (l !== -1) {
+			datas.splice(l, 1);
+		}
 		
 		currentdata = datas.filter((cdata)=>{
 			if(data.room === cdata.room){
